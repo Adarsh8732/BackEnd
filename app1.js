@@ -21,9 +21,13 @@ const app = express();
 // always use me
 //  express json -> req.body add
 // reserve a folder only from which client can acces the files 
+
+
 app.use(express.static("Frontend_folder"));
 app.use(express.json());
 app.use(cookieParser());
+
+
 // // function -> route  path
 // // frontend -> req -> /
 // read data storage
@@ -31,17 +35,25 @@ app.use(cookieParser());
 // let content = JSON.parse(fs.readFileSync("./data.json"));
 // // localhost / auth / 10-> patch
 
+
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
+
 app.listen(8081, function () {
     console.log("server started");
 })
+
+
 // 404 page
+
+
 app.use(function (req, res) {
     // console.log("fullPath", fullPath);
     res.status(404).sendFile
-        (path.join(__dirname, "404.html"));
+        (path.join(__dirname, "./Frontend_folder/404.html"));
 })
+
+
 //     console.log("hello from home page")
 //     // res.send("<h1>Hello from Backend</h1>");
 //     res.status(200).json(

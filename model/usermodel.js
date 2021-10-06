@@ -1,8 +1,7 @@
 const mongoose = require("mongoose");
 let { PASSWORD } = require("../secrets");
 const validator = require("email-validator");
-let dbLink
-    = `mongodb+srv://admin:${PASSWORD}@cluster0.3gwfq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+let dbLink= `mongodb+srv://FoodApp_Jas:${PASSWORD}@cluster0.zwzfs.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 mongoose
     .connect(dbLink)
     .then(function (connection) {
@@ -43,11 +42,15 @@ const userSchema = new mongoose.Schema({
         }
     },
     createdAt: {
-        type: String,
-
+        type: String
     },
     token: String,
-    validUpto: Date
+    validUpto: Date,
+    role:{
+        type:String,
+        enum:["admin","ce","user"],
+        default:"user"
+    }
 })
 // hook
 userSchema.pre('save', function (next) {
@@ -55,7 +58,9 @@ userSchema.pre('save', function (next) {
     this.confirmPassword = undefined;
     next();
 });
+
 // document method
+
 userSchema.methods.resetHandler = function (password, confirmPassword) {
     this.password = password;
     this.confirmPassword = confirmPassword;

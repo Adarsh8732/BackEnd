@@ -9,6 +9,7 @@ const emailSender = require("../helpers/emailSender");
 const authRouter = express.Router();
 
 // routes 
+
 authRouter.use(bodyChecker)
 authRouter.route("/signup").post(signupUser);
 
@@ -35,6 +36,7 @@ async function loginUser(req, res) {
     try {
         let { email, password } = req.body;
         let user = await userModel.findOne({ email });
+        console.log(user,"39");
         if (user) {
             // password
             if (user.password == password) {
@@ -73,9 +75,10 @@ async function forgetPassword(req, res) {
             (Math.floor(Math.random() * 10000) + 10000)
                 .toString().substring(1);
                 // date.now ->300
-            let updateRes = await userModel.updateOne({ email }, { token,validUpto })
+            // let updateRes = await userModel.updateOne({ email }, { token,validUpto })
             //    console.log("updateQuery",updateRes)
             // 
+            await userModel.updateOne({email},{token});
             let newUser = await userModel.findOne({ email });
             // console.log("newUser", newUser)
             // email
@@ -108,9 +111,13 @@ async function resetPassword(req, res) {
     // 10 lakh -> 10 lakh users
     // frontend -> local storage  
     try {
+
         let { token, confirmPassword, password } = req.body;
+        
         let user = await userModel.findOne({ token });
+        
         // console.log("user 108", user);
+
         if (user) {
             // await userModel.updateOne({ token }, {
             //     token: undefined,
@@ -129,6 +136,10 @@ async function resetPassword(req, res) {
             res.status(200).json({
                 message: "user token send to your email",
                 user: newUser,
+            })
+        }else{
+            res.staus(404).send({
+                message:"user to this user not found"
             })
         }
 

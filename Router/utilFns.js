@@ -3,15 +3,15 @@ const { JWT_SECRET } = require("../secrets");
 module.exports.protectRoute = 
 function protectRoute(req, res, next) {
     try {
-        console.log("reached body checker");
+        // console.log("reached body checker");
         // cookie-parser
-        console.log("61", req.cookies)
+        console.log("in protect route", req.cookies)
         // jwt 
         // -> verify everytime that if 
         // you are bringing the token to get your response
         let decryptedToken = jwt.verify(req.cookies.JWT, JWT_SECRET);
         // console.log("66", decryptedToken)
-        console.log("68", decryptedToken)
+        console.log("decryptedToken", decryptedToken)
         if (decryptedToken) {
             next();
         } else {
